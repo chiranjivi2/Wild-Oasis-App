@@ -10,7 +10,7 @@ export async function getCabins() {
   return data;
 }
 
-export async function createCabin(newCabin) {
+export async function createEditCabin(newCabin, id) {
   //https://uuhmrdduhevwrnkajfed.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
@@ -18,20 +18,39 @@ export async function createCabin(newCabin) {
     ""
   );
   // console.log(imageName);
+  //while editing we have two different situations , case 1: not changing image    case 2: replacing existing cabin image;  to take  into account these two cases we have following logic there
+  const hasImagePath = newCabin?.image?.startsWith?.(supabaseUrl);
 
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  const imagePath = hasImagePath
+    ? newCabin.image
+    : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
-  //1. Create Cabin
+  //1. Create Edit Cabin
+  let query = supabase.from("cabins");
 
-  const { data, error } = await supabase
-    .from("cabins")
-    .insert([{ ...newCabin, image: imagePath }])
-    .select();
+  //A) Create Cabin
+  if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
+
+  // const { data, error } = await supabase
+  //   .from("cabins")
+  //   .insert([{ ...newCabin, image: imagePath }])
+  //   .select();
+
+  //B) Edit Cabin
+
+  if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
+
+  const { data, error } = await query.select();
 
   if (error) {
     console.error(error.message);
     throw new Error("Cabin could not be created.");
   }
+  // const { data, error } = await supabase
+  //   .from("cabins")
+  //   .update({ other_column: "otherValue" })
+  //   .eq("some_column", "someValue")
+  //   .select();
 
   //uploading cabin image  const { data, error } = await supabase.storage.from('bucket_name').upload('file_path', file)
   //2. Upload image

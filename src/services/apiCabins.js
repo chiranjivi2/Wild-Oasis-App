@@ -52,9 +52,12 @@ export async function createEditCabin(newCabin, id) {
   //   .eq("some_column", "someValue")
   //   .select();
 
+  //if there is already image then doesnot reupload the image
+
+  if (hasImagePath) return data;
+
   //uploading cabin image  const { data, error } = await supabase.storage.from('bucket_name').upload('file_path', file)
   //2. Upload image
-
   const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageName, newCabin.image);
@@ -68,6 +71,7 @@ export async function createEditCabin(newCabin, id) {
       "Error Uploading file and also cabin could not be created. chiranjivi"
     );
   }
+  return data;
 }
 
 export async function deleteCabins(id) {

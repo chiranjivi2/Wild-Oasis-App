@@ -14,7 +14,8 @@ const Form = styled.form`
     css`
       width: 80rem;
     `}
-    overflow:hidden;
+      overflow:hidden;
+  padding: 2.4rem 4rem;
   font-size: 1.4rem;
 `;
 

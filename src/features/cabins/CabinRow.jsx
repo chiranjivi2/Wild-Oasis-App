@@ -83,6 +83,17 @@ function CabinRow({ cabin }) {
           <button disabled={isCreating} onClick={handleDuplicate}>
             <HiSquare2Stack />
           </button>
+          {/* // for disaplaying as modal window */}
+          {/* <Modal>
+            <Modal.Open opens="cabin-form">
+              <button>
+                <HiPencil />
+              </button>
+            </Modal.Open>
+            <Modal.Window name="cabin-form">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+          </Modal> */}
           <button onClick={() => setShowForm((show) => !show)}>
             <HiPencil />
           </button>
@@ -92,12 +103,10 @@ function CabinRow({ cabin }) {
         </div>
       </TableRow>
       {showForm && (
-        <Modal onClose={() => setShowForm(false)}>
-          <CreateCabinForm
-            cabinToEdit={cabin}
-            onCloseModal={() => setShowForm(false)}
-          />
-        </Modal>
+        <CreateCabinForm
+          cabinToEdit={cabin}
+          onCloseModal={() => setShowForm(false)}
+        />
       )}
     </>
   );

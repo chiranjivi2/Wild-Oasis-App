@@ -4,11 +4,10 @@ import Row from "../ui/Row";
 import { getCabins } from "../services/apiCabins";
 import CabinTable from "../features/cabins/CabinTable";
 import Button from "../ui/Button";
-import { useState } from "react";
-import CreateCabinForm from "../features/cabins/createCabinForm";
+
+import AddCabin from "../features/cabins/AddCabin";
 
 function Cabins() {
-  const [showForm, setShowForm] = useState();
   const {
     data: cabins,
     isLoading,
@@ -30,10 +29,7 @@ function Cabins() {
 
       <Row type="vertical">
         <CabinTable cabins={cabins} />
-        <Button onClick={() => setShowForm((show) => !show)}>
-          Add new Cabin
-        </Button>
-        {showForm && <CreateCabinForm />}
+        <AddCabin />
       </Row>
     </>
   );

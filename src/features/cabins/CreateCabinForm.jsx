@@ -5,12 +5,7 @@ import { useForm } from "react-hook-form";
 import FormRow from "../../ui/FormRow";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
-
-const Form = styled.form`
-  padding: 3rem;
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-`;
+import Form from "../../ui/Form";
 
 // const FormRow = styled.div`
 //   display: grid;
@@ -61,7 +56,7 @@ const FileInput = styled.input.attrs({ type: "file" })`
   }
 `;
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
 
@@ -85,6 +80,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: () => {
             // console.log(data);
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -95,6 +91,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: () => {
             // console.log(data);
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -109,7 +106,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   // console.log(isWorking);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       {/* <FormRow>
         <Label>Cabin Name</Label>
         <Input
@@ -194,7 +194,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         />
       </FormRow>
       <FormRow>
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

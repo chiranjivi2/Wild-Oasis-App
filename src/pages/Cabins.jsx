@@ -8,17 +8,13 @@ import Button from "../ui/Button";
 import AddCabin from "../features/cabins/AddCabin";
 
 function Cabins() {
-  const {
-    data: cabins,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: cabins, isPending } = useQuery({
     queryKey: ["cabins"],
     queryFn: getCabins,
   });
-  // console.log(cabins);
+  console.log(cabins);
 
-  if (isLoading) return "Loading...";
+  if (isPending) return "Loading...";
 
   return (
     <>

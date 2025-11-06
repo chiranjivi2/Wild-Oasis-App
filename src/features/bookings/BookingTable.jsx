@@ -1,18 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { getBookings } from "../../services/apiBookings";
 import Table from "../../ui/Table";
 import BookingRow from "./BookingRow";
+import Pagination from "../../ui/Pagination";
+import { useBookings } from "./useBookings";
 
 function BookingTable() {
-  const { data: bookings, isPending } = useQuery({
-    queryKey: "bookings",
-    queryFn: getBookings,
-  });
-
+  const { bookings, count, isPending } = useBookings();
   if (isPending) return <div>Loading...</div>;
 
   console.log(bookings);
-  console.log(bookings.length);
+
   //   const arr = [0, 1, 2];
   //   console.log(arr.length);
   return (
@@ -29,6 +25,9 @@ function BookingTable() {
         data={bookings}
         render={(booking) => <BookingRow booking={booking} key={booking.id} />}
       />
+      <Table.Footer>
+        <Pagination count={count} />
+      </Table.Footer>
     </Table>
   );
 }
